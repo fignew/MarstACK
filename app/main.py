@@ -74,6 +74,21 @@ async def set_b2500_report(request: Request):
     return JSONResponse(content={"code": 1, "msg": "ok"})
 
 
+@app.get("/prod/api/v1/setVenusDReporting")
+async def set_venus_d_reporting(request: Request):
+    """
+    Endpoint to emulate /prod/api/v1/setVenusDReporting. Despite the name this endpoint is used by
+    venus e 3.0.
+
+    Returns a simple JSON response {"code":1,"msg":"ok"}
+    """
+    # Log all query parameters
+    params = dict(request.query_params)
+    logger.debug(f"GET /prod/api/v1/setVenusDReporting - Query params: {params}")
+
+    return JSONResponse(content={"code": 1, "msg": "ok"})
+
+
 @app.get("/app/neng/getDateInfoeu.php", response_class=PlainTextResponse)
 async def get_date_info(request: Request):
     """

@@ -14,6 +14,11 @@ This program works excellently together with Tomquist's great tools such as [b25
 MarstACK has been tested with:
 * my battery - Marstek Saturn-C B2500-H Firmware v110
 * [bbmfarp](https://github.com/bbmfarp) - Marstek Venus E (2. Gen) Firmware 152
+* Marstek Venus E (3. Gen) Firmware 147
+
+Note: for Marstek Venus E (3. Gen) to consider being connected to cloud it is additionally necessary
+to have a local mqtt broker running. See the [MarstACK Wiki](https://github.com/fignew/MarstACK/wiki)
+for more details.
 
 Please let me know if you have success with other models or if there are any errors that show up in the logs.
 I would recommend not doing any blind firmware updates as breakage is likely.
