@@ -87,9 +87,9 @@ async def get_date_info(request: Request):
     params = dict(request.query_params)
     logger.debug(f"GET /app/neng/getDateInfoeu.php - Query params: {params}")
 
-    # Current date in the configured timezone (TZ env var, default UTC).
+    # Current date in the configured timezone (TIMEZONE env var, default UTC).
     # pytz bundles its own zoneinfo database, so no system tzdata needed.
-    now = datetime.now(pytz.timezone(os.environ.get("TZ", "UTC")))
+    now = datetime.now(pytz.timezone(os.environ.get("TIMEZONE", "UTC")))
 
     # Format: _YYYY_MM_DD_HH_MM_SS_04_0_0_0
     formatted_date = f"_{now.year}_{now.month:02d}_{now.day:02d}_{now.hour:02d}_{now.minute:02d}_{now.second:02d}_04_0_0_0"

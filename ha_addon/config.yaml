@@ -17,5 +17,9 @@ boot: auto
 host_network: true
 options:
   log_level: info
+  # IANA zone name for the date endpoint (pytz resolves it internally,
+  # no system tzdata needed). Examples: Europe/Berlin, UTC
+  timezone: UTC
 schema:
   log_level: list(error|info|debug)
+  timezone: str
