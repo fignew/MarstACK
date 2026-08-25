@@ -1,20 +1,20 @@
 name: MarstACK
-version: 0.2.2
+version: 0.3.0
 slug: marstack
 description: Keep your Marstek battery operational without cloud access
 url: https://github.com/fignew/MarstACK
-icon: icon.png
 arch:
   - amd64
   - aarch64
   - armv7
 startup: application
 boot: auto
-ingress: false
-ports:
-  80/tcp: 8000
-host_network: false
-image: ghcr.io/fignew/marstack:0.2.2
+# The battery contacts eu.hamedata.com on plain HTTP port 80, so the add-on
+# must listen on port 80 itself. Home Assistant does not allow add-ons to map
+# privileged host ports, so we share the host network instead and let the
+# server bind port 80 directly. Port 80 must therefore be unused on the host
+# (disable conflicting add-ons such as the Nginx Proxy Manager add-on).
+host_network: true
 options:
   log_level: info
 schema:
