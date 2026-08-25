@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime
 import pytz
+import os
 from fastapi import FastAPI, Request
 from fastapi.responses import (
     JSONResponse,
@@ -87,8 +88,14 @@ async def get_date_info(request: Request):
     params = dict(request.query_params)
     logger.debug(f"GET /app/neng/getDateInfoeu.php - Query params: {params}")
 
-    # Get current date in UTC and format it
-    now = datetime.now(pytz.utc)
+    # Get current date and format it
+    # Return localtime or UTC if timezone is not set
+    tz_name = os.getenv("APP_TIMEZONE")
+
+    try:
+        now = datetime.now(pytz.utc).astimezone(pytz.timezone(tz_name))
+    except pytz.UnknownTimeZoneError:
+        now = datetime.now(pytz.utc)
 
     # Format: _YYYY_MM_DD_HH_MM_SS_04_0_0_0
     formatted_date = f"_{now.year}_{now.month:02d}_{now.day:02d}_{now.hour:02d}_{now.minute:02d}_{now.second:02d}_04_0_0_0"
