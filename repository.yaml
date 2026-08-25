@@ -1,6 +1,4 @@
-name: "MarstACK"
-url: "https://github.com/fignew/MarstACK"
-maintainer: "github/fignew"
-addons:
-  marstack:
-    repository: ha_addon
+# https://developers.home-assistant.io/docs/apps/repository#repository-configuration
+name: MarstACK app repository
+url: https://github.com/fignew/MarstACK
+maintainer: github/fignew
