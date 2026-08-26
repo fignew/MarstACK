@@ -2,12 +2,13 @@ import logging
 import os
 from datetime import datetime
 import pytz
-from fastapi import FastAPI, Request, RedirectResponse
+from fastapi import FastAPI, Request
 from fastapi.responses import (
     JSONResponse,
     PlainTextResponse,
     HTMLResponse,
     FileResponse,
+    RedirectResponse,
 )
 from fastapi.staticfiles import StaticFiles
 import markdown
