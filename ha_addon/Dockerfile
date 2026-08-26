@@ -10,4 +10,7 @@ USER root
 
 EXPOSE 80
 
-CMD ["/bin/sh", "-c", "uvicorn main:app --log-level ${LOG_LEVEL} --host 0.0.0.0 --port 80"]
+# The Supervisor passes app options via /data/options.json, not env vars.
+# start.py maps them to the env vars the app reads, then execs uvicorn so
+# it runs as PID 1 and receives signals directly.
+CMD ["python3", "/code/app/start.py"]
