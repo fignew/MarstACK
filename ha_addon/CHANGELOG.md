@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.7
+
+- Fixed startup crash in 0.3.6 (start.py missing from the app image)
+
 ## 0.3.6
 
 - Fixed app options (timezone, redirect_url, log_level) not reaching the
