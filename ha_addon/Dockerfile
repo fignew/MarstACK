@@ -6,6 +6,8 @@
 # bind port 80 itself. Binding a privileged port requires root.
 FROM ghcr.io/fignew/marstack:latest
 
+COPY start.py /code/app/start.py
+
 USER root
 
 EXPOSE 80
