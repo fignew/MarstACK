@@ -31,6 +31,36 @@ In order for this to work you must configure your DNS resolver to return your lo
 
 There is a [MarstACK Wiki](https://github.com/fignew/MarstACK/wiki) with instructions on how to configure various routers.
 
+### Home Assistant app
+
+There's also a Home Assistant app (formerly add-on). To install it:
+
+1. In Home Assistant, go to Settings, then Add-ons, then the Add-on Store.
+2. Open the menu in the top right (the three dots) and pick Repositories.
+3. Add `https://github.com/fignew/MarstACK`.
+4. Install MarstACK from the store.
+5. Set your timezone in the configuration (for example Europe/Berlin),
+   optionally a redirect_url, and start it.
+
+A few things to know before you start it:
+
+The app needs port 80 on the Home Assistant host because that's what
+the battery contacts. Since Home Assistant OS 2026.8, new installs use
+port 80 for their own web UI, so you'll need to move that first:
+Settings, System, Network, HTTP server port (8123 works). If you're on
+an older install already using 8123, nothing to do. Other add-ons can
+hold the port too; Nginx Proxy Manager is the usual suspect.
+
+Your DNS has to point eu.hamedata.com at the Home Assistant host. See
+the [Wiki](https://github.com/fignew/MarstACK/wiki) for router setup.
+
+If you set `redirect_url`, visiting the host lands people on that
+address instead of the MarstACK status page. Useful if you want
+`http://homeassistant.local` to just open Home Assistant.
+
+First start builds the app image locally, which takes a few minutes,
+longer on ARM. Full details are in the Documentation tab of the app.
+
 ### Running hosted image in Docker/Podman
 
 ```
