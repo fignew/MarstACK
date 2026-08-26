@@ -1,7 +1,8 @@
 import logging
+import os
 from datetime import datetime
 import pytz
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, RedirectResponse
 from fastapi.responses import (
     JSONResponse,
     PlainTextResponse,
@@ -36,8 +37,13 @@ async def favicon():
 @app.get("/", response_class=HTMLResponse)
 async def marstack_homepage(request: Request):
     """
-    Friendly Homepage for MarstACK
+    Landing page for MarstACK. If REDIRECT_URL is set (e.g. the Home
+    Assistant web UI), visitors are redirected there instead.
     """
+
+    redirect_url = os.environ.get("REDIRECT_URL", "").strip()
+    if redirect_url:
+        return RedirectResponse(redirect_url, status_code=307)
 
     md_text = f"""
 # MarstACK

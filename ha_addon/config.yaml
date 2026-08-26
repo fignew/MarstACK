@@ -20,6 +20,11 @@ options:
   # IANA zone name for the date endpoint (pytz resolves it internally,
   # no system tzdata needed). Examples: Europe/Berlin, UTC
   timezone: UTC
+  # Optional redirect target for the landing page, e.g. the Home
+  # Assistant web UI (https://homeassistant.local:8123). Leave empty to
+  # keep the built-in status page.
+  redirect_url: ""
 schema:
   log_level: list(error|info|debug)
   timezone: str
+  redirect_url: str?
