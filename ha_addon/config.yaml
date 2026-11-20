@@ -1,5 +1,5 @@
 name: MarstACK
-version: 0.3.7
+version: 0.3.8
 slug: marstack
 description: Keep your Marstek battery operational without cloud access
 url: https://github.com/fignew/MarstACK
@@ -24,7 +24,16 @@ options:
   # Assistant web UI (https://homeassistant.local:8123). Leave empty to
   # keep the built-in status page.
   redirect_url: ""
+  # Optional catch-all forwarder: any request MarstACK does not serve
+  # itself is proxied to this URL, e.g. https://127.0.0.1:443 to hand
+  # other port-80 traffic (such as Ecowitt weather gateway webhooks) to
+  # the Home Assistant web UI on the same host. Leave empty to disable.
+  # TLS to the target is always used but its certificate is never
+  # verified (the target is normally addressed by loopback/IP, where the
+  # certificate name cannot match anyway).
+  forward_url: ""
 schema:
   log_level: list(error|info|debug)
   timezone: str
   redirect_url: str?
+  forward_url: str?

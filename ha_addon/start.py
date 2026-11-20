@@ -14,6 +14,8 @@ os.environ["LOG_LEVEL"] = options.get("log_level", "info")
 os.environ["TIMEZONE"] = options.get("timezone", "UTC")
 if options.get("redirect_url"):
     os.environ["REDIRECT_URL"] = options["redirect_url"]
+if options.get("forward_url"):
+    os.environ["FORWARD_TARGET"] = options["forward_url"]
 
 port = options.get("port", 80)
 os.execvp(

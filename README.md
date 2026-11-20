@@ -58,6 +58,27 @@ If you set `redirect_url`, visiting the host lands people on that
 address instead of the MarstACK status page. Useful if you want
 `http://homeassistant.local` to just open Home Assistant.
 
+If you set `forward_url`, any request MarstACK does not handle itself is
+proxied to that URL.
+
+### Why you might need this
+
+Home Assistant can only serve **one** HTTP listener on one port, and it
+is either TLS or plain - not both (`ssl_certificate`/`ssl_key` in its
+`configuration.yaml` make the single port TLS, and there is no built-in
+HTTP-to-HTTPS redirect: a plain request just dies at the TLS
+handshake). So once Home Assistant is configured to do its own HTTPS,
+plain-HTTP devices (Ecowitt weather gateways and others) can no longer
+reach it directly and need a proxy on their port.
+
+For this situation set `forward_url: https://127.0.0.1:443` to pass
+everything MarstACK doesn't serve to the Home Assistant web UI on the
+same host that serves its own TLS on port 443. TLS to the target is
+used but its certificate is never verified - the target is normally
+addressed by loopback/IP, where the name on the certificate could never
+match. MarstACK's own endpoints always take precedence; only unhandled
+paths are forwarded.
+
 First start builds the app image locally, which takes a few minutes,
 longer on ARM. Full details are in the Documentation tab of the app.
 

@@ -2,6 +2,7 @@ import logging
 import os
 from datetime import datetime
 import pytz
+import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import (
     JSONResponse,
@@ -20,12 +21,18 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Configure logging
 logger = logging.getLogger("uvicorn.error")  # Use uvicorn's error logger
 
+# Optional catch-all reverse proxy: any request MarstACK does not handle
+# itself is forwarded to this target (e.g. https://127.0.0.1:443 to hand
+# other traffic to the Home Assistant web UI that listens on the same
+# host). Leave unset to keep the previous 404 behaviour.
+FORWARD_TARGET = os.environ.get("FORWARD_TARGET", "").strip().rstrip("/")
+
 
 # Log unknown endpoints/methods as errors
 @app.middleware("http")
 async def log_error_middleware(request: Request, call_next):
     response = await call_next(request)
-    if response.status_code in [404, 405]:
+    if response.status_code in [404, 405] and not getattr(request.state, "forwarded", False):
         logger.error(f'{response.status_code} ERROR - "{request.method} {request.url}"')
     return response
 
@@ -51,11 +58,11 @@ async def marstack_homepage(request: Request):
 ![Logo](static/logo.png)
 ### Keep your solar battery online even when you're offline
 ---
-*{
+*{{
         "Success! You've correctly configured your DNS. Your batteries should now work offline."
         if request.url.hostname == "eu.hamedata.com"
         else "In order for your batteries to work offline you must configure your network's DNS. Check out the Wiki."
-    }*
+    }}*
 
 [MarstACK Github](https://www.github.com/fignew/MarstACK)
 
@@ -168,6 +175,26 @@ async def get_realtime_soc(request: Request):
 
     return JSONResponse(
         content={"code": 1, "show": 0, "msg": "ok", "data": {"soc": 0, "time_no": 0}}
+    )
+
+
+# Catch-all forwarder: must be registered LAST so every MarstACK endpoint
+# above keeps precedence and only genuinely unhandled paths are proxied.
+if FORWARD_TARGET:
+    # Imported here so a broken/renamed fastapi-proxy-lib can never take
+    # down the battery emulation, which does not depend on the forwarder.
+    from fastapi_proxy_lib.fastapi.app import reverse_http_app
+
+    # TLS is used and enforced, but certificates are never verified: the
+    # target is almost always a service on the same host addressed by
+    # loopback/IP, where the name on the certificate can never match.
+    app.mount(
+        "/",
+        reverse_http_app(
+            client=httpx.AsyncClient(verify=False, timeout=30),
+            base_url=f"{FORWARD_TARGET}/",
+        ),
+        name="proxy",
     )
 
 
